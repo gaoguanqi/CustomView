@@ -1,11 +1,13 @@
 package com.maple.smaple.customview.jianshu;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.maple.smaple.customview.R;
@@ -36,6 +38,9 @@ public class JianShuActivity extends AppCompatActivity{
     private List<ListBean> mListData;
 
     private JianShuAdapter mAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+
+    private boolean isLoading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,40 +50,71 @@ public class JianShuActivity extends AppCompatActivity{
         initView();
         initData();
         initEvent();
-
-
-        mAdapter = new JianShuAdapter(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.setBannerData(mBannerData);
-        mAdapter.setMenuData(mMenuData);
-        mAdapter.setListData(mListData);
-
-        mAdapter.setOnItemClickLitener(new OnItemClickLitener() {
-
-            @Override
-            public void onBannerItemClick(String title) {
-                Toast.makeText(JianShuActivity.this,title,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onMenuItemClick(String name) {
-                Toast.makeText(JianShuActivity.this,name,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onListItemClick(String title) {
-                Toast.makeText(JianShuActivity.this,title,Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void initView() {
+        mAdapter = new JianShuAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * 当RecyclerView的滑动状态改变时触发
+             */
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            /**
+             * 当RecyclerView滑动时触发
+             * 类似点击事件的MotionEvent.ACTION_MOVE
+             */
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                Log.e("TAG", "lastVisibleItemPosition:"+lastVisibleItemPosition);
+                Log.e("TAG", "count:"+ mAdapter.getItemCount());
+                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+                    Log.e("TAG", "loading executed");
+                    boolean isRefreshing = mSwipeRefreshLayout.isRefreshing();
+                    Log.e("TAG", "isRefreshing:"+isRefreshing);
+                    if (isRefreshing) {
+                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                        return;
+                    }
+                    if (!isLoading ) {
+                        isLoading = true;
+                        mAdapter.setFooterState(isLoading);
+                        mAdapter.notifyDataSetChanged();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadData();
+                            }
+                        }, 3000);
+                    }
+                }
+            }
+        });
+
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright
                 ,android.R.color.holo_green_light
                 ,android.R.color.holo_orange_light
                 ,android.R.color.holo_red_light);
+    }
+
+    private void loadData() {
+        isLoading = false;
+        for (int i = 0; i < 10; i++) {
+            ListBean mListBean = new ListBean("加载更多"+i,"描述描述描述描述描述描述","https://www.baidu.com/img/bd_logo1.png");
+            mListData.add(mListBean);
+            mAdapter.setFooterState(isLoading);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initData() {
@@ -102,11 +138,33 @@ public class JianShuActivity extends AppCompatActivity{
             ListBean mListBean = new ListBean("标题"+i,"描述描述描述描述描述描述","https://www.baidu.com/img/bd_logo1.png");
             mListData.add(mListBean);
         }
+
+
+        mAdapter.setBannerData(mBannerData);
+        mAdapter.setMenuData(mMenuData);
+        mAdapter.setListData(mListData);
+        mAdapter.setFooterState(isLoading);
     }
 
 
     private void initEvent() {
+        mAdapter.setOnItemClickLitener(new OnItemClickLitener() {
 
+            @Override
+            public void onBannerItemClick(String title) {
+                Toast.makeText(JianShuActivity.this,title,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onMenuItemClick(String name) {
+                Toast.makeText(JianShuActivity.this,name,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onListItemClick(String title) {
+                Toast.makeText(JianShuActivity.this,title,Toast.LENGTH_SHORT).show();
+            }
+        });
         //下拉刷新
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

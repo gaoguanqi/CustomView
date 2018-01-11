@@ -2,6 +2,7 @@ package com.maple.smaple.customview.jianshu;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +32,14 @@ public class JianShuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public  final int BANNER_SIZE = 1;
     public  final int MENU_SIZE = 1;
-    //加载更多
     public  final int FOOTER_SIZE = 1;
-
-
 
     private Context mContext;
 
     private List<BannerBean> mBannerData;
     private List<MenuBean> mMenuData;
     private List<ListBean> mListData;
+    private boolean mFooterState;
 
     private LayoutInflater mInflater;
 
@@ -63,7 +62,7 @@ public class JianShuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return new MenuHolder(mContext,mOnItemClickLitener,mInflater.inflate(R.layout.item_jianshu_menu, parent, false));
         } else if(viewType == LIST){
             return new ListHolder(mContext,mOnItemClickLitener,mInflater.inflate(R.layout.item_jianshu_list, parent, false));
-        }else if (viewType == FOOTER) {
+        } else if(viewType == FOOTER){
             return new FooterHolder(mContext,mInflater.inflate(R.layout.item_jianshu_footer, parent, false));
         }else{
             return null;
@@ -96,7 +95,9 @@ public class JianShuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return MENU;
         }else if(mListData.size() != 0 && position >= (BANNER_SIZE+MENU_SIZE)) {
             return LIST;
-        }else {
+        }else if(position +1 == getItemCount()){
+            return FOOTER;
+        }else{
             return -1;
         }
     }
@@ -113,6 +114,11 @@ public class JianShuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setListData(List<ListBean> data) {
         this.mListData = data;
+        notifyDataSetChanged();
+    }
+
+    public void setFooterState(boolean footerState) {
+        this.mFooterState = footerState;
         notifyDataSetChanged();
     }
 }
