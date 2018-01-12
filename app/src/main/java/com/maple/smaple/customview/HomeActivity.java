@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.maple.smaple.customview.demo.MyActivity;
 import com.maple.smaple.customview.jianshu.JianShuActivity;
+import com.maple.smaple.customview.smart.SmartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
        // startActivity(new Intent(HomeActivity.this, MultiTypeActivity.class));
-        startActivity(new Intent(HomeActivity.this, JianShuActivity.class));
+       // startActivity(new Intent(HomeActivity.this, JianShuActivity.class));
+        startActivity(new Intent(HomeActivity.this, SmartActivity.class));
     }
 
     @Override
