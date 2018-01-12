@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.maple.smaple.customview.R;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -44,6 +45,13 @@ public class SmartActivity extends AppCompatActivity{
                 refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
 
                 refreshLayout.finishLoadmoreWithNoMoreData();//完成加载并标记没有更多数据 1.0.4
+            }
+        });
+
+        refreshLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
