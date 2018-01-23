@@ -51,6 +51,19 @@ public class SmartActivity extends AppCompatActivity{
         initView();
         initData();
         initEvent();
+
+
+        /**
+
+         本周工作：
+
+         1，好人品修改友盟分享；
+         2，优化代码；
+
+         下周计划：
+         1，；
+
+         */
     }
 
     private void initView() {
