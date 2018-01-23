@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
 
-
     private Context mContext;
     private List<TimeLineBean> mData;
 
