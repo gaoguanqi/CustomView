@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.maple.smaple.customview.demo.LoadingActivity;
 import com.maple.smaple.customview.demo.MyActivity;
 import com.maple.smaple.customview.jianshu.JianShuActivity;
 import com.maple.smaple.customview.smart.SmartActivity;
@@ -77,7 +78,8 @@ public class HomeActivity extends AppCompatActivity {
        // startActivity(new Intent(HomeActivity.this, MultiTypeActivity.class));
        // startActivity(new Intent(HomeActivity.this, JianShuActivity.class));
         //startActivity(new Intent(HomeActivity.this, SmartActivity.class));
-        startActivity(new Intent(HomeActivity.this, TimeLineActivity.class));
+        //startActivity(new Intent(HomeActivity.this, TimeLineActivity.class));
+        startActivity(new Intent(HomeActivity.this, LoadingActivity.class));
     }
 
     @Override

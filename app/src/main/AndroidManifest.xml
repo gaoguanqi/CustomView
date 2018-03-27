@@ -26,7 +26,8 @@
         <activity android:name=".demo.MyActivity" />
         <activity android:name=".jianshu.JianShuActivity" />
         <activity android:name=".smart.SmartActivity" />
-        <activity android:name=".timeline.TimeLineActivity"></activity>
+        <activity android:name=".timeline.TimeLineActivity" />
+        <activity android:name=".demo.LoadingActivity"/>
     </application>
 
 </manifest>
